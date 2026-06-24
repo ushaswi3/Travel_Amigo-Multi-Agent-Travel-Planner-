@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoyageAI Tours — AI Multi-Agent Travel Planner</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css?v=1.0.10">
+</head>
+<body class="home-page">
+    <!-- Background Gradient Blurs -->
+    <div class="bg-blur bg-blur-1"></div>
+    <div class="bg-blur bg-blur-2"></div>
+    <div class="bg-blur bg-blur-3"></div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo" onclick="location.href='index.html'">
+                <i class="fa-solid fa-compass-drafting logo-icon"></i>
+                <h1>Voyage<span>AI</span></h1>
+            </div>
+            
+            <nav class="nav-links" id="landingNav">
+                <a href="index.html" class="nav-link active">HOME</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+                <a href="trips.html" class="nav-link">TRIPS</a>
+                <a href="dashboard.html" class="nav-link" id="navDashLink" style="display: none;">DASHBOARD</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="anonymous-actions" id="anonActions" style="margin-left: 20px;">
+                    <button class="btn btn-secondary btn-sm" id="navLoginBtn">LOG IN</button>
+                    <button class="btn btn-primary btn-sm btn-orange" id="navSignupBtn">SIGN UP</button>
+                </div>
+                <div class="user-profile dropdown" id="userProfile" style="display: none; margin-left: 20px;">
+                    <span class="user-badge" id="navUserBadge" style="cursor: pointer;"><i class="fa-solid fa-user"></i> <span id="usernameDisplay">User</span> <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; margin-left: 4px;"></i></span>
+                    <div class="dropdown-menu" id="profileDropdown">
+                        <a href="dashboard.html" class="dropdown-item"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+                        <a href="trips.html" class="dropdown-item"><i class="fa-solid fa-suitcase-rolling"></i> My Trips</a>
+                        <div style="border-top: 1px solid rgba(255, 255, 255, 0.08);"></div>
+                        <button id="logoutBtn" class="dropdown-item logout-item"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- ================= HOME LANDING PAGE (Reference 2) ================= -->
+            <section id="landingSection" class="landing-view" style="width: 100%;">
+                <!-- Hero Section Banner -->
+                <div class="hero-banner">
+                    <!-- Single Main Page Premium Backdrop -->
+                    <div class="hero-single-backdrop" style="background-image: linear-gradient(rgba(12, 28, 48, 0.45) 0%, rgba(12, 28, 48, 0.8) 100%), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center; position: absolute; top:0; left:0; width:100%; height:100%; z-index:0;">
+                        <video autoplay muted loop playsinline class="hero-bg-video" style="object-fit: cover; width:100%; height:100%; position:absolute; top:0; left:0; opacity:0.65; mix-blend-mode: overlay; pointer-events: none;">
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-flying-over-a-dense-green-forest-41604-large.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="hero-scenery-overlay" style="z-index: 1;"></div>
+                    
+                    <div class="hero-left-col" style="z-index: 2;">
+                        <h2 id="heroTitle" class="playfair-title" style="font-size: 4rem; line-height: 1.1; margin-bottom: 20px;">Let's<br>Get Lost.</h2>
+                        <p class="hero-tagline" id="heroSubtitle" style="font-size: 1.2rem; max-width: 500px; line-height: 1.6; margin-bottom: 30px;">Curated travel experiences for the wild at heart, powered by collaborative AI swarm networks.</p>
+                        <div class="hero-cta-row" style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-primary btn-orange" id="heroExploreBtn" onclick="location.href='trips.html'" style="padding: 16px 32px; font-weight: 700; letter-spacing: 0.08em; box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35);">EXPLORE FEATURED TRIPS</button>
+                            <button class="btn btn-secondary" onclick="startPlanning()" style="padding: 16px 32px; font-weight: 700; letter-spacing: 0.08em; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.3); color: #fff;">START PLANNING NOW</button>
+                        </div>
+                    </div>
+
+                    <!-- Rotating Badge Stamp (Premium Branding Element) -->
+                    <div class="hero-badge-stamp" style="z-index: 2;">
+                        <svg viewBox="0 0 100 100" width="110" height="110">
+                            <path id="circlePath" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="none"></path>
+                            <text>
+                                <textPath href="#circlePath" startOffset="0%" fill="rgba(255, 255, 255, 0.8)">
+                                    ADVENTURE AWAITS • LET'S GET LOST • 
+                                </textPath>
+                            </text>
+                        </svg>
+                        <i class="fa-solid fa-compass stamp-icon"></i>
+                    </div>
+
+                    <!-- Bottom descriptive callouts overlay -->
+                    <div class="hero-bottom-overlay" style="z-index: 2;">
+                        <div class="overlay-col">
+                            <h4>FEEL FREEDOM</h4>
+                            <p>Let our multi-agent planning swarm curate stays and optimize budget limits automatically.</p>
+                        </div>
+                        <div class="overlay-col">
+                            <h4>CAPTURE THE MOMENT</h4>
+                            <p>Skip the planning fatigue and focus entirely on creating unforgettable travel memories.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= ADVENTURES SECTION ================= -->
+            <section class="landing-adventures">
+                <div class="section-title-wrapper" style="margin-bottom: 50px; text-align: center;">
+                    <span class="section-subtitle" id="chooseJourneySubtitle" style="display: block; font-size: 0.9rem; letter-spacing: 0.15em; color: #f97316; font-weight: 700; margin-bottom: 8px;">CHOOSE YOUR JOURNEY</span>
+                    <h3 class="playfair-title" id="adventureAwaitsTitle" style="font-size: 2.5rem; color: #fff; margin-bottom: 16px;">Worldwide Adventure Awaits</h3>
+                    <p id="adventureDesc" style="color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto; line-height: 1.6;">Select an adventure style below to discover the top-rated destinations worldwide for that category, complete with Google Maps location links.</p>
+                </div>
+
+                <div class="adventures-grid">
+                    <!-- 1. Trekking -->
+                    <div class="adventure-card glass-panel reveal-on-scroll">
+                        <div class="adventure-img-box">
+                            <div class="adventure-img" style="background-image: url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=600&q=80');"></div>
+                            <span class="adventure-tag" id="tagTrek">🧗‍♂️ Trek & Climb</span>
+                        </div>
+                        <div class="adventure-info">
+                            <h4 id="titleTrek">Trekking Adventures</h4>
+                            <p id="descTrek">Scale alpine peaks, travel ancient mountain passes, and experience majestic trails beneath high glaciers.</p>
+                            <button class="btn btn-secondary btn-block" id="btnTrek" onclick="window.showAdventureLocations('trekking')">Explore Locations</button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Ballooning -->
+                    <div class="adventure-card glass-panel reveal-on-scroll">
+                        <div class="adventure-img-box">
+                            <div class="adventure-img" style="background-image: url('https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?auto=format&fit=crop&w=600&q=80');"></div>
+                            <span class="adventure-tag" id="tagBalloon">🎈 Hot Air Balloon</span>
+                        </div>
+                        <div class="adventure-info">
+                            <h4 id="titleBalloon">Hot Air Ballooning</h4>
+                            <p id="descBalloon">Drift silently over volcanic valleys, rolling wine country, and historic fortresses at early sunrise.</p>
+                            <button class="btn btn-secondary btn-block" id="btnBalloon" onclick="window.showAdventureLocations('ballooning')">Explore Locations</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Canopy -->
+                    <div class="adventure-card glass-panel reveal-on-scroll">
+                        <div class="adventure-img-box">
+                            <div class="adventure-img" style="background-image: url('https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?auto=format&fit=crop&w=600&q=80');"></div>
+                            <span class="adventure-tag" id="tagCanopy">🌲 Canopy Swings</span>
+                        </div>
+                        <div class="adventure-info">
+                            <h4 id="titleCanopy">Canopy & Zipline</h4>
+                            <p id="descCanopy">Soar high above deep jungle canyons, active volcanoes, and emerald valleys on speed-glide canopy tracks.</p>
+                            <button class="btn btn-secondary btn-block" id="btnCanopy" onclick="window.showAdventureLocations('canopy')">Explore Locations</button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Safari -->
+                    <div class="adventure-card glass-panel reveal-on-scroll">
+                        <div class="adventure-img-box">
+                            <div class="adventure-img" style="background-image: url('https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=600&q=80');"></div>
+                            <span class="adventure-tag" id="tagSafari">🦁 Wildlife Safari</span>
+                        </div>
+                        <div class="adventure-info">
+                            <h4 id="titleSafari">Wildlife Safaris</h4>
+                            <p id="descSafari">Witness majestic wildlife in their natural savannas, riverbeds, and untamed national reserves.</p>
+                            <button class="btn btn-secondary btn-block" id="btnSafari" onclick="window.showAdventureLocations('safari')">Explore Locations</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Auth Modal Wrapper (Reference 1) -->
+        <div id="authModal" class="modal-overlay" style="display: none;">
+            <div class="modal-card-wrapper">
+                <button id="closeAuthModalBtn" class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+                
+                <section id="authSection" class="auth-container">
+                    <!-- Left quote showcase panel -->
+                    <div class="auth-showcase">
+                        <div class="showcase-content">
+                            <h2>VoyageAI - Every Great Journey Starts Here</h2>
+                            <p class="showcase-quote">"Travel is the only purchase that enriches you in ways beyond material wealth."</p>
+                        </div>
+                        <div class="cloud-decoration cloud-1"></div>
+                        <div class="cloud-decoration cloud-2"></div>
+                    </div>
+
+                    <!-- Right Form Panel -->
+                    <div class="auth-card">
+                        <div class="auth-body">
+                            <!-- Login Form -->
+                            <form id="loginForm" class="auth-form active-form">
+                                <h2>Welcome</h2>
+                                <p class="auth-subtitle">Login with Email</p>
+                                
+                                <div class="form-group">
+                                    <label for="loginUsername">Email Id / Username</label>
+                                    <div class="input-with-icon">
+                                        <input type="text" id="loginUsername" required placeholder="thisuix@mail.com">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="loginPassword">Password</label>
+                                    <div class="input-with-icon">
+                                        <input type="password" id="loginPassword" required placeholder="••••••••••••••">
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('loginPassword')">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="forgot-pwd-row">
+                                    <a href="#" class="forgot-link">Forgot your password?</a>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary btn-block btn-blue">
+                                    LOGIN
+                                </button>
+                                
+                                <div class="divider-text"><span>OR</span></div>
+                                
+                                <!-- Social Logins -->
+                                <div class="social-login-row">
+                                    <button type="button" class="btn-social google" onclick="openOAuthPopup('google')"><i class="fa-brands fa-google"></i></button>
+                                    <button type="button" class="btn-social facebook" onclick="openOAuthPopup('facebook')"><i class="fa-brands fa-facebook-f"></i></button>
+                                    <button type="button" class="btn-social apple" onclick="openOAuthPopup('apple')"><i class="fa-brands fa-apple"></i></button>
+                                </div>
+
+                                <div class="auth-toggle-msg">
+                                    Don't have account? <a href="#" id="toggleToSignup">Register Now</a>
+                                </div>
+
+                                <div class="auth-error" id="loginError"></div>
+                            </form>
+
+                            <!-- Signup Form -->
+                            <form id="signupForm" class="auth-form">
+                                <h2>Join Us</h2>
+                                <p class="auth-subtitle">Create Account</p>
+                                
+                                <div class="form-group">
+                                    <label for="signupUsername">Username</label>
+                                    <div class="input-with-icon">
+                                        <input type="text" id="signupUsername" required placeholder="Choose a username">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="signupEmail">Email Address</label>
+                                    <div class="input-with-icon">
+                                        <input type="email" id="signupEmail" required placeholder="you@example.com">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="signupPassword">Password</label>
+                                    <div class="input-with-icon">
+                                        <input type="password" id="signupPassword" required placeholder="Create strong password">
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signupPassword')">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary btn-block btn-blue">
+                                    REGISTER
+                                </button>
+                                
+                                <div class="auth-toggle-msg">
+                                    Already have an account? <a href="#" id="toggleToLogin">Login Now</a>
+                                </div>
+                                <div class="auth-error" id="signupError"></div>
+                                <div class="auth-success" id="signupSuccess"></div>
+                            </form>
+                        </div>
+                        
+                        <!-- Landmarks Silhouette Art at bottom -->
+                        <div class="landmarks-silhouette">
+                            <svg viewBox="0 0 400 60" preserveAspectRatio="none">
+                                <path d="M 0 60 L 0 45 L 5 45 L 5 40 L 10 35 L 10 25 L 12 25 L 12 15 L 14 15 L 14 5 L 16 5 L 16 15 L 18 15 L 18 25 L 20 25 L 20 35 L 25 40 L 25 45 L 30 45 L 30 60 M 35 60 L 35 48 L 45 48 L 45 35 L 48 35 L 48 20 L 52 20 L 52 35 L 55 35 L 55 48 L 65 48 L 65 60 M 70 60 L 70 50 L 78 50 L 78 40 L 74 40 L 74 15 L 82 15 L 82 40 L 78 40 L 78 50 L 86 50 L 86 60 M 90 60 L 92 60 L 92 35 L 94 35 L 94 30 L 98 25 L 98 15 L 100 12 L 102 12 L 104 15 L 104 25 L 108 30 L 108 35 L 110 35 L 110 60 M 115 60 L 115 30 L 125 30 L 125 10 L 135 10 L 135 30 L 145 30 L 145 60 M 150 60 L 150 50 L 155 45 L 155 30 L 160 30 L 160 20 L 165 20 L 165 15 L 170 15 L 170 20 L 175 20 L 175 30 L 180 30 L 180 45 L 185 50 L 185 60" stroke="#0ea5e9" stroke-width="1.5" fill="none" opacity="0.3"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- Adventure Locations Modal -->
+        <div id="adventureLocationsModal" class="modal-overlay" style="display: none; z-index: 1000;">
+            <div class="modal-card-wrapper adventure-modal-card">
+                <button id="closeAdventureModalBtn" class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+                <div class="adventure-modal-body">
+                    <h3 id="adventureModalTitle" class="playfair-title" style="font-size: 1.8rem; margin-bottom: 8px; color: #fff;">Top Adventure Locations</h3>
+                    <p class="adventure-modal-intro">Explore top-rated spots around the world where you can experience this adventure, with maps and details.</p>
+                    <div class="adventure-locations-list" id="adventureLocationsList">
+                        <!-- Dynamically populated via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js?v=1.0.10"></script>
+</body>
+</html>

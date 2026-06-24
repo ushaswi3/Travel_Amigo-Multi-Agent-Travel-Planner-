@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famous Trips — VoyageAI Tours</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css?v=1.0.10">
+</head>
+<body>
+    <div class="bg-blur bg-blur-1"></div>
+    <div class="bg-blur bg-blur-2"></div>
+    <div class="bg-blur bg-blur-3"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo" onclick="location.href='index.html'">
+                <i class="fa-solid fa-compass-drafting logo-icon"></i>
+                <h1>Voyage<span>AI</span></h1>
+            </div>
+            
+            <nav class="nav-links" id="landingNav">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+                <a href="trips.html" class="nav-link active">TRIPS</a>
+                <a href="dashboard.html" class="nav-link" id="navDashLink" style="display: none;">DASHBOARD</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="anonymous-actions" id="anonActions">
+                    <button class="btn btn-secondary btn-sm" id="navLoginBtn">LOG IN</button>
+                    <button class="btn btn-primary btn-sm btn-orange" id="navSignupBtn">SIGN UP</button>
+                </div>
+                <div class="user-profile dropdown" id="userProfile" style="display: none;">
+                    <span class="user-badge" id="navUserBadge" style="cursor: pointer;"><i class="fa-solid fa-user"></i> <span id="usernameDisplay">User</span> <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; margin-left: 4px;"></i></span>
+                    <div class="dropdown-menu" id="profileDropdown">
+                        <a href="dashboard.html" class="dropdown-item"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+                        <a href="trips.html" class="dropdown-item"><i class="fa-solid fa-suitcase-rolling"></i> My Trips</a>
+                        <div style="border-top: 1px solid rgba(255, 255, 255, 0.08);"></div>
+                        <button id="logoutBtn" class="dropdown-item logout-item"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <section class="trips-page-view" style="width: 100%;">
+                <!-- Title Header -->
+                <div class="section-title-wrapper" style="margin-bottom: 40px;">
+                    <span class="section-subtitle" id="popularAdventuresSubtitle">POPULAR ADVENTURES</span>
+                    <h3 class="playfair-title" id="popularAdventuresTitle">Explore Featured Swarm Runs</h3>
+                    <p id="popularAdventuresDesc">Select a pre-designed destination profile below to spawn a custom planning swarm immediately, or search and filter styles.</p>
+                </div>
+
+                <!-- Search & Filters Bar -->
+                <div class="trips-filter-bar glass-panel reveal-on-scroll">
+                    <div class="search-input-box">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="tripSearchFilter" placeholder="Search destinations (e.g. Tokyo, Swiss)..." onkeyup="filterTripsList()">
+                    </div>
+                    <div class="filter-chips">
+                        <button class="filter-chip active" id="filterAll" data-filter="all" onclick="filterTripsByCategory('all', this)">All</button>
+                        <button class="filter-chip" id="filterBeaches" data-filter="beaches" onclick="filterTripsByCategory('beaches', this)">🏖️ Beaches</button>
+                        <button class="filter-chip" id="filterCulture" data-filter="culture" onclick="filterTripsByCategory('culture', this)">🏯 Culture</button>
+                        <button class="filter-chip" id="filterAdventure" data-filter="adventure" onclick="filterTripsByCategory('adventure', this)">🧗‍♂️ Adventure</button>
+                    </div>
+                </div>
+
+                <!-- Famous Trips Grid -->
+                <div class="famous-trips-grid" id="famousTripsGrid">
+                    <!-- Goa -->
+                    <div class="famous-card glass-panel reveal-on-scroll" data-name="goa india" data-category="beaches">
+                        <div class="card-image-stub" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80');">
+                            <span class="famous-badge" id="spotGoaBadge">🏖️ Beaches & Nightlife</span>
+                            <div class="card-meta-overlay">
+                                <h4>Goa, India</h4>
+                                <div class="card-meta-sub">
+                                    <span class="price-val" data-price="20000" data-days="3">From ₹20,000 / 3 Days</span>
+                                    <a class="card-map-link" href="https://www.google.com/maps/search/?api=1&query=Goa+India" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="famous-body">
+                            <p id="spotGoaDesc">Relax on scenic golden beaches, explore colonial Portuguese churches, and enjoy vibrant coastal nightlife.</p>
+                            <button class="btn btn-secondary btn-block famous-plan-btn" data-destination="Goa" data-days="3" data-budget="20000" data-vibes="Beaches,Nightlife">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Plan This Trip
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tokyo -->
+                    <div class="famous-card glass-panel reveal-on-scroll" data-name="tokyo japan" data-category="culture">
+                        <div class="card-image-stub" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80');">
+                            <span class="famous-badge" id="spotTokyoBadge">🏯 Tech & Heritage</span>
+                            <div class="card-meta-overlay">
+                                <h4>Tokyo, Japan</h4>
+                                <div class="card-meta-sub">
+                                    <span class="price-val" data-price="120000" data-days="5">From ₹1,20,000 / 5 Days</span>
+                                    <a class="card-map-link" href="https://www.google.com/maps/search/?api=1&query=Tokyo+Japan" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="famous-body">
+                            <p id="spotTokyoDesc">Explore towering neon skyscrapers, historical Shinto shrines, busy street food markets, and bullet trains.</p>
+                            <button class="btn btn-secondary btn-block famous-plan-btn" data-destination="Tokyo" data-days="5" data-budget="120000" data-vibes="Culture,Food,Shopping">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Plan This Trip
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Paris -->
+                    <div class="famous-card glass-panel reveal-on-scroll" data-name="paris france" data-category="culture">
+                        <div class="card-image-stub" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80');">
+                            <span class="famous-badge" id="spotParisBadge">💖 Arts & romance</span>
+                            <div class="card-meta-overlay">
+                                <h4>Paris, France</h4>
+                                <div class="card-meta-sub">
+                                    <span class="price-val" data-price="150000" data-days="4">From ₹1,50,000 / 4 Days</span>
+                                    <a class="card-map-link" href="https://www.google.com/maps/search/?api=1&query=Paris+France" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="famous-body">
+                            <p id="spotParisDesc">Savor gourmet French cuisine, stroll down the Seine, visit the Louvre, and admire the Eiffel Tower lights.</p>
+                            <button class="btn btn-secondary btn-block famous-plan-btn" data-destination="Paris" data-days="4" data-budget="150000" data-vibes="History,Food,Culture">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Plan This Trip
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Maldives -->
+                    <div class="famous-card glass-panel reveal-on-scroll" data-name="maldives" data-category="beaches">
+                        <div class="card-image-stub" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=600&q=80');">
+                            <span class="famous-badge" id="spotMaldivesBadge">💎 Luxury Retreat</span>
+                            <div class="card-meta-overlay">
+                                <h4>Maldives</h4>
+                                <div class="card-meta-sub">
+                                    <span class="price-val" data-price="80000" data-days="3">From ₹80,000 / 3 Days</span>
+                                    <a class="card-map-link" href="https://www.google.com/maps/search/?api=1&query=Maldives" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="famous-body">
+                            <p id="spotMaldivesDesc">Stay in breathtaking overwater villas, snorkel inside clear lagoons, and enjoy isolated spa cruises.</p>
+                            <button class="btn btn-secondary btn-block famous-plan-btn" data-destination="Maldives" data-days="3" data-budget="80000" data-vibes="Beaches,Relaxation">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Plan This Trip
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Swiss Alps -->
+                    <div class="famous-card glass-panel reveal-on-scroll" data-name="swiss alps switzerland" data-category="adventure">
+                        <div class="card-image-stub" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80');">
+                            <span class="famous-badge" id="spotSwissBadge">🧗‍♂️ Alpine Hiking</span>
+                            <div class="card-meta-overlay">
+                                <h4>Swiss Alps</h4>
+                                <div class="card-meta-sub">
+                                    <span class="price-val" data-price="180000" data-days="6">From ₹1,80,000 / 6 Days</span>
+                                    <a class="card-map-link" href="https://www.google.com/maps/search/?api=1&query=Swiss+Alps" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="famous-body">
+                            <p id="spotSwissDesc">Scale snowy slopes, travel along scenic cog railways, and visit quiet valleys tucked beneath the Matterhorn.</p>
+                            <button class="btn btn-secondary btn-block famous-plan-btn" data-destination="Zermatt" data-days="6" data-budget="180000" data-vibes="Adventure,Nature">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Plan This Trip
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Rome -->
+                    <div class="famous-card glass-panel reveal-on-scroll" data-name="rome italy" data-category="culture">
+                        <div class="card-image-stub" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=600&q=80');">
+                            <span class="famous-badge" id="spotRomeBadge">🏛️ Empire Ruins</span>
+                            <div class="card-meta-overlay">
+                                <h4>Rome, Italy</h4>
+                                <div class="card-meta-sub">
+                                    <span class="price-val" data-price="140000" data-days="5">From ₹1,40,000 / 5 Days</span>
+                                    <a class="card-map-link" href="https://www.google.com/maps/search/?api=1&query=Colosseum+Rome+Italy" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="famous-body">
+                            <p id="spotRomeDesc">Walk the floors of the historic Colosseum, toss coins into the Trevi Fountain, and explore the Vatican galleries.</p>
+                            <button class="btn btn-secondary btn-block famous-plan-btn" data-destination="Rome" data-days="5" data-budget="140000" data-vibes="History,Culture,Food">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Plan This Trip
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bali -->
+                    <div class="famous-card glass-panel reveal-on-scroll" data-name="bali indonesia" data-category="beaches">
+                        <div class="card-image-stub" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80');">
+                            <span class="famous-badge" id="spotBaliBadge">🌴 Island Nature</span>
+                            <div class="card-meta-overlay">
+                                <h4>Bali, Indonesia</h4>
+                                <div class="card-meta-sub">
+                                    <span class="price-val" data-price="45000" data-days="4">From ₹45,000 / 4 Days</span>
+                                    <a class="card-map-link" href="https://www.google.com/maps/search/?api=1&query=Bali+Indonesia" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="famous-body">
+                            <p id="spotBaliDesc">Hike beautiful volcanic hillsides, visit majestic temple cliffs, and enjoy fresh surf on pristine sands.</p>
+                            <button class="btn btn-secondary btn-block famous-plan-btn" data-destination="Bali" data-days="4" data-budget="45000" data-vibes="Beaches,Adventure,Nature">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Plan This Trip
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sydney -->
+                    <div class="famous-card glass-panel reveal-on-scroll" data-name="sydney australia" data-category="adventure">
+                        <div class="card-image-stub" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80');">
+                            <span class="famous-badge" id="spotSydneyBadge">🐨 Harbor Vibe</span>
+                            <div class="card-meta-overlay">
+                                <h4>Sydney, Australia</h4>
+                                <div class="card-meta-sub">
+                                    <span class="price-val" data-price="160000" data-days="5">From ₹1,60,000 / 5 Days</span>
+                                    <a class="card-map-link" href="https://www.google.com/maps/search/?api=1&query=Sydney+Opera+House+Australia" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="famous-body">
+                            <p id="spotSydneyDesc">Tour the world-famous Sydney Opera House, surf Bondi beach reefs, and cruise across the historic harbor.</p>
+                            <button class="btn btn-secondary btn-block famous-plan-btn" data-destination="Sydney" data-days="5" data-budget="160000" data-vibes="Adventure,Shopping,Relaxation">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Plan This Trip
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swarm Mechanics Details Section -->
+                <div class="swarm-explanation glass-panel" style="margin-top: 70px;">
+                    <h3 class="section-heading" id="howWorksTitle">How Swarm Planning Works</h3>
+                    <p class="explanation-lead" id="howWorksDesc">Our system doesn't generate raw text template itineraries. It coordinates API integrations to fetch actual stays and transit costs, and uses five distinct cognitive layers to compile details.</p>
+                    
+                    <div class="how-it-works-timeline">
+                        <div class="timeline-step">
+                            <div class="step-badge">1</div>
+                            <div class="step-info">
+                                <h4 id="step1Title">Submit Route Details</h4>
+                                <p id="step1Desc">Provide source, destination, date, and budget limit. Set vibe matches like culture, dining, or beaches.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-badge">2</div>
+                            <div class="step-info">
+                                <h4 id="step2Title">Swarm Deployment</h4>
+                                <p id="step2Desc">The Coordinator deploys sub-agent workers to source hotels, compare flights, check weather trends, and calculate costs.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="step-badge">3</div>
+                            <div class="step-info">
+                                <h4 id="step3Title">Get Boarding Pass Summary</h4>
+                                <p id="step3Desc">Once audits finish, your final boarding pass workspace renders with day timeline accordions and circular budget stats gauges.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Auth Modal Wrapper -->
+        <div id="authModal" class="modal-overlay" style="display: none;">
+            <!-- Modal elements will load dynamically here -->
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2026 VoyageAI Tours Travel Swarm Planner. Made with <i class="fa-solid fa-heart text-accent"></i> & FastAPI.</p>
+        </footer>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js?v=1.0.10"></script>
+</body>
+</html>

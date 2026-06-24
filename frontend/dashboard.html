@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Dashboard — VoyageAI Tours</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css?v=1.0.10">
+    <script>
+        if (!localStorage.getItem("token")) {
+            location.href = "index.html";
+        }
+    </script>
+</head>
+<body>
+    <!-- Background Gradient Blurs -->
+    <div class="bg-blur bg-blur-1"></div>
+    <div class="bg-blur bg-blur-2"></div>
+    <div class="bg-blur bg-blur-3"></div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo" onclick="location.href='index.html'">
+                <i class="fa-solid fa-compass-drafting logo-icon"></i>
+                <h1>Voyage<span>AI</span></h1>
+            </div>
+            
+            <nav class="nav-links" id="landingNav">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+                <a href="trips.html" class="nav-link">TRIPS</a>
+                <a href="dashboard.html" class="nav-link active" id="navDashLink">DASHBOARD</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="user-profile dropdown" id="userProfile">
+                    <span class="user-badge" id="navUserBadge" style="cursor: pointer;"><i class="fa-solid fa-user"></i> <span id="usernameDisplay">User</span> <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; margin-left: 4px;"></i></span>
+                    <div class="dropdown-menu" id="profileDropdown">
+                        <a href="dashboard.html" class="dropdown-item"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+                        <a href="trips.html" class="dropdown-item"><i class="fa-solid fa-suitcase-rolling"></i> My Trips</a>
+                        <div style="border-top: 1px solid rgba(255, 255, 255, 0.08);"></div>
+                        <button id="logoutBtn" class="dropdown-item logout-item"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <main class="app-main">
+            <!-- ================= DASHBOARD SCREEN ================= -->
+            <section id="dashboardSection" class="dashboard-view" style="width: 100%;">
+                <!-- Hero Header Banner -->
+                <div class="dashboard-hero glass-panel">
+                    <div class="hero-content">
+                        <h2>Welcome back, Explorer! ✈️</h2>
+                        <p>Deploy specialized AI agents to generate custom, weather-ready itineraries that respect your budget limits.</p>
+                        <button id="heroPlanBtn" class="btn btn-primary" style="margin-top: 16px;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Plan New Journey
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat-card">
+                            <span class="stat-num" id="statTotalTrips">0</span>
+                            <span class="stat-label"><i class="fa-solid fa-map-location-dot"></i> Trips Planned</span>
+                        </div>
+                        <div class="hero-stat-card">
+                            <span class="stat-num" id="statSpentBudget">₹0</span>
+                            <span class="stat-label"><i class="fa-solid fa-receipt"></i> Budget Managed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-header">
+                    <div>
+                        <h2>Your Travel Dashboard</h2>
+                        <p>Manage and explore your AI-planned trips</p>
+                    </div>
+                    <div class="dashboard-actions">
+                        <!-- Search & Filter Input -->
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="tripSearchInput" placeholder="Filter trips by destination...">
+                        </div>
+                        <button id="newTripBtn" class="btn btn-primary">
+                            <i class="fa-solid fa-plus"></i> Plan New Trip
+                        </button>
+                    </div>
+                </div>
+
+                <div class="trips-container">
+                    <h3 id="recentTripsTitle">Recent Trips</h3>
+                    <div id="tripsList" class="trips-grid">
+                        <!-- Dynamic Trip Cards will load here -->
+                    </div>
+                    <!-- Empty State -->
+                    <div id="emptyState" class="empty-state glass-panel" style="display: none;">
+                        <i class="fa-solid fa-compass empty-icon"></i>
+                        <h4>No trips planned yet</h4>
+                        <p>Create your first multi-agent travel plan in seconds.</p>
+                        <button id="emptyStateBtn" class="btn btn-primary">Start Planning</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= TRIP WIZARD FORM ================= -->
+            <section id="wizardSection" class="wizard-view glass-panel" style="display: none; width: 100%;">
+                <div class="wizard-header">
+                    <button id="backToDashboardBtn" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
+                    <div class="wizard-hero-branding">
+                        <span class="wizard-subtitle-pill">Travel More, Worry Less.</span>
+                        <h2 class="wizard-main-title">Explore the World, One Journey at a Time</h2>
+                        <p class="wizard-lead-desc">Set your destination, choose dates, and deploy AI agent swarms to curate weather-optimized, budget-friendly itineraries.</p>
+                    </div>
+                </div>
+
+                <!-- Stepper Node Indicator -->
+                <div class="wizard-stepper">
+                    <div class="step-progress-line">
+                        <div class="step-progress-fill" id="wizardProgressFill"></div>
+                    </div>
+                    <div class="step-node active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Route & Dates</div>
+                    </div>
+                    <div class="step-node" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Budget & Vibe</div>
+                    </div>
+                    <div class="step-node" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Custom Notes</div>
+                    </div>
+                </div>
+
+                <form id="tripForm" class="wizard-form">
+                    <!-- STEP 1: ROUTE & DATES -->
+                    <div class="wizard-step active-step" data-step="1">
+                        <div class="wizard-search-bar">
+                            <div class="search-col">
+                                <label for="tripSource"><i class="fa-solid fa-plane-departure"></i> Source City</label>
+                                <input type="text" id="tripSource" required placeholder="Where from?">
+                            </div>
+                            <div class="search-col">
+                                <label for="tripDestination"><i class="fa-solid fa-location-dot"></i> Destination City</label>
+                                <input type="text" id="tripDestination" required placeholder="Where are you going?">
+                            </div>
+                            <div class="search-col">
+                                <label for="tripDate"><i class="fa-solid fa-calendar-days"></i> Departure Date</label>
+                                <input type="date" id="tripDate" required min="2026-06-18">
+                            </div>
+                            <div class="search-col">
+                                <label for="tripDays"><i class="fa-solid fa-clock"></i> Duration (Days)</label>
+                                <input type="number" id="tripDays" required min="1" max="30" value="3">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: BUDGET & VIBE -->
+                    <div class="wizard-step" data-step="2">
+                        <div class="form-group">
+                            <label for="tripBudget"><i class="fa-solid fa-indian-rupee-sign"></i> Total Budget (INR / USD)</label>
+                            <input type="number" id="tripBudget" required min="1000" placeholder="e.g. 30000" value="25000">
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-heart"></i> Travel Vibe (Select Preferences)</label>
+                            <div class="chips-container" id="preferencesChips">
+                                <div class="chip" data-val="Beaches" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>🏖️ Beaches</span>
+                                </div>
+                                <div class="chip" data-val="Adventure" style="background-image: url('https://images.unsplash.com/photo-1533240332313-0db49b439ad3?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>🧗‍♂️ Adventure</span>
+                                </div>
+                                <div class="chip" data-val="Culture" style="background-image: url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>⛩️ Culture</span>
+                                </div>
+                                <div class="chip" data-val="Food" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>🍜 Food & Dining</span>
+                                </div>
+                                <div class="chip" data-val="Nature" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>🌲 Nature & Wildlife</span>
+                                </div>
+                                <div class="chip" data-val="Shopping" style="background-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>🛍️ Shopping</span>
+                                </div>
+                                <div class="chip" data-val="Nightlife" style="background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>🥂 Nightlife</span>
+                                </div>
+                                <div class="chip" data-val="Relaxation" style="background-image: url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>💆‍♂️ Relaxation</span>
+                                </div>
+                                <div class="chip" data-val="History" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=400&q=80');">
+                                    <i class="fa-regular fa-square unchecked-box"></i>
+                                    <i class="fa-solid fa-square-check checked-box"></i>
+                                    <span>🏛️ History & Heritage</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: SPECIAL REQUESTS -->
+                    <div class="wizard-step" data-step="3">
+                        <div class="form-group">
+                            <label for="tripRequirements"><i class="fa-solid fa-circle-info"></i> Special Requests / Notes</label>
+                            <textarea id="tripRequirements" rows="4" placeholder="e.g. Vegetarian food options, near beach resorts, child-friendly activities..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-sliders"></i> Swarm Optimization Priority</label>
+                            <div class="optimization-toggles">
+                                <label class="radio-label">
+                                    <input type="radio" name="swarmPriority" value="balanced" checked>
+                                    <span>Balanced</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="swarmPriority" value="budget">
+                                    <span>Maximize Savings</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="swarmPriority" value="luxury">
+                                    <span>Premium Comfort</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step Controls -->
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-secondary" id="prevStepBtn" style="display: none;">
+                            <i class="fa-solid fa-chevron-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextStepBtn">
+                            Next <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-lg" id="submitTripBtn" style="display: none;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Deploy Agent Swarm
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- ================= LOADING OVERLAY ================= -->
+            <div id="loadingSection" class="loading-overlay" style="display: none; width: 100%;">
+                <div class="loading-card glass-panel">
+                    <div class="loading-animation-wrapper">
+                        <!-- Radar Sweep Animation -->
+                        <div class="radar-scanner">
+                            <div class="radar-sweep"></div>
+                            <div class="radar-dot dot-1"></div>
+                            <div class="radar-dot dot-2"></div>
+                            <div class="radar-dot dot-3"></div>
+                            <i class="fa-solid fa-brain brain-pulse"></i>
+                        </div>
+                    </div>
+                    <h3 id="loadingTitle">Deploying AI Agent Swarm...</h3>
+                    <p id="loadingDescription">Contacting coordinator agent to organize the swarm threads.</p>
+                    
+                    <!-- Grid of Steps (sleeker presentation) -->
+                    <div class="agent-steps-grid">
+                        <div class="agent-step-node" id="step-coord">
+                            <div class="step-icon"><i class="fa-solid fa-circle-minus"></i></div>
+                            <span>Coordinator</span>
+                        </div>
+                        <div class="agent-step-node" id="step-dest">
+                            <div class="step-icon"><i class="fa-solid fa-circle-minus"></i></div>
+                            <span>Destination</span>
+                        </div>
+                        <div class="agent-step-node" id="step-weather">
+                            <div class="step-icon"><i class="fa-solid fa-circle-minus"></i></div>
+                            <span>Weather</span>
+                        </div>
+                        <div class="agent-step-node" id="step-hotel">
+                            <div class="step-icon"><i class="fa-solid fa-circle-minus"></i></div>
+                            <span>Hotels</span>
+                        </div>
+                        <div class="agent-step-node" id="step-transport">
+                            <div class="step-icon"><i class="fa-solid fa-circle-minus"></i></div>
+                            <span>Transport</span>
+                        </div>
+                        <div class="agent-step-node" id="step-budget">
+                            <div class="step-icon"><i class="fa-solid fa-circle-minus"></i></div>
+                            <span>Budget</span>
+                        </div>
+                        <div class="agent-step-node" id="step-llm">
+                            <div class="step-icon"><i class="fa-solid fa-circle-minus"></i></div>
+                            <span>LLM Expert</span>
+                        </div>
+                    </div>
+
+                    <!-- Futuristic Terminal Logs -->
+                    <div class="terminal-container">
+                        <div class="terminal-header">
+                            <span class="dot-btn red"></span>
+                            <span class="dot-btn yellow"></span>
+                            <span class="dot-btn green"></span>
+                            <span class="terminal-title">swarm-agent-logs.sh</span>
+                        </div>
+                        <div class="terminal-body" id="terminalLogs">
+                            <p class="log-entry system">[SYSTEM] Swarm initialization sequence started...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TRIP DETAILS SCREEN ================= -->
+            <section id="detailsSection" class="details-view" style="display: none; width: 100%;">
+                <!-- boarding-pass-header is a beautiful ticket-like container -->
+                <div class="details-header boarding-pass-ticket glass-panel">
+                    <div class="ticket-top">
+                        <button id="backToDashFromDetails" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
+                        <span class="ticket-serial">BOARDING PASS // SWARM-PLANNER-SWARM</span>
+                    </div>
+                    
+                    <div class="ticket-body">
+                        <div class="ticket-port source-port">
+                            <span class="port-code" id="detailsSourceCode">HYD</span>
+                            <span class="port-name" id="detailsSourceCity">Hyderabad</span>
+                        </div>
+                        
+                        <div class="ticket-route-line">
+                            <i class="fa-solid fa-plane-departure"></i>
+                            <div class="flight-dotted-line"></div>
+                            <i class="fa-solid fa-plane-arrival"></i>
+                        </div>
+                        
+                        <div class="ticket-port dest-port">
+                            <span class="port-code" id="detailsDestCode">GOI</span>
+                            <span class="port-name" id="detailsDestTitle">Goa</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ticket-meta-grid">
+                        <div class="meta-item">
+                            <span class="meta-label">DETAILS SUMMARY</span>
+                            <p id="detailsMetaSubtitle" class="meta-val"><i class="fa-solid fa-route"></i> From Hyderabad &bull; 3 Days &bull; Budget: ₹25,000</p>
+                        </div>
+                        <div class="meta-item flex-stretch">
+                            <span class="meta-label">VIBE MATCH</span>
+                            <div class="highlights-box" id="destinationHighlights">
+                                <!-- highlights chips -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details Navigation Tabs -->
+                    <div class="details-tabs">
+                        <button class="details-tab active" data-content="placesTab">
+                            <i class="fa-solid fa-map-location-dot"></i> Places to Visit
+                        </button>
+                        <button class="details-tab" data-content="itineraryTab">
+                            <i class="fa-solid fa-calendar-day"></i> Itinerary
+                        </button>
+                        <button class="details-tab" data-content="staysTransportTab">
+                            <i class="fa-solid fa-hotel"></i> Stays & Transport
+                        </button>
+                        <button class="details-tab" data-content="weatherTab">
+                            <i class="fa-solid fa-cloud-sun"></i> Weather
+                        </button>
+                        <button class="details-tab" data-content="budgetTab">
+                            <i class="fa-solid fa-chart-pie"></i> Budget & AI Tips
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Details Content -->
+                <div class="details-content-container">
+                    
+                    <!-- 1. ITINERARY TAB -->
+                    <div id="itineraryTab" class="tab-content">
+                        <div class="itinerary-controls">
+                            <button id="expandAllDays" class="btn btn-secondary btn-sm"><i class="fa-solid fa-angles-down"></i> Expand All</button>
+                            <button id="collapseAllDays" class="btn btn-secondary btn-sm"><i class="fa-solid fa-angles-up"></i> Collapse All</button>
+                        </div>
+                        <div class="itinerary-timeline" id="itineraryTimeline">
+                            <!-- Dynamic Day Timelines -->
+                        </div>
+                    </div>
+
+                    <!-- 2. STAYS & TRANSPORT TAB -->
+                    <div id="staysTransportTab" class="tab-content">
+                        <div class="split-layout">
+                            <!-- Stays (Hotels) -->
+                            <div class="glass-panel content-card">
+                                <h3><i class="fa-solid fa-hotel"></i> Curated Stays</h3>
+                                <p class="section-desc">Hotel options sorted by rating and budget constraints.</p>
+                                <div class="hotel-list" id="hotelList">
+                                    <!-- Dynamic Hotels -->
+                                </div>
+                            </div>
+                            <!-- Transport Options -->
+                            <div class="glass-panel content-card">
+                                <h3><i class="fa-solid fa-thumbs-up"></i> Swarm Transit Choice</h3>
+                                <div class="transport-card" id="recommendedTransport">
+                                    <!-- Dynamic Transport Recommendation -->
+                                </div>
+
+                                <h3><i class="fa-solid fa-plane-departure"></i> Alternative Staged Flights</h3>
+                                <div class="alt-transport-list" id="altTransportList">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. WEATHER TAB -->
+                    <div id="weatherTab" class="tab-content" style="padding: 0;">
+                        <!-- Google Weather Dark Widget Container -->
+                        <div class="google-weather-widget" style="background: #111827; color: #f3f4f6; border-radius: 24px; padding: 24px; font-family: 'Outfit', 'Inter', sans-serif; border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 12px 40px rgba(0,0,0,0.4);">
+                            
+                            <!-- Hourly Navigation Tabs Header -->
+                            <div class="google-weather-nav-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="font-size: 1.15rem; font-weight: 800; color: #fff;">Hourly</span>
+                                    <div style="display: flex; gap: 8px; margin-left: 8px; overflow-x: auto; max-width: 550px; padding-bottom: 2px; scrollbar-width: none;">
+                                        <span class="weather-chip active-chip" style="background: #fec006; color: #111827; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Overview</span>
+                                        <span class="weather-chip" style="background: #1f2937; color: #9ca3af; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Precipitation</span>
+                                        <span class="weather-chip" style="background: #1f2937; color: #9ca3af; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Wind</span>
+                                        <span class="weather-chip" style="background: #1f2937; color: #9ca3af; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Air Quality</span>
+                                        <span class="weather-chip" style="background: #1f2937; color: #9ca3af; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Humidity</span>
+                                        <span class="weather-chip" style="background: #1f2937; color: #9ca3af; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s;">Cloud cover</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; background: #1f2937; padding: 3px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.04);">
+                                    <button class="weather-view-btn active-view" style="background: #374151; border: none; color: #fff; padding: 6px 12px; border-radius: 7px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                        <i class="fa-solid fa-chart-line" style="color: #fec006;"></i> Chart
+                                    </button>
+                                    <button class="weather-view-btn" style="background: transparent; border: none; color: #9ca3af; padding: 6px 12px; border-radius: 7px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                                        <i class="fa-solid fa-list"></i> List
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Horizontal scrollable Day list (Daily Forecast) -->
+                            <div class="google-weather-days-container" style="overflow-x: auto; width: 100%; white-space: nowrap; padding-bottom: 12px; margin-bottom: 24px; scrollbar-width: thin;">
+                                <div id="weatherForecastGrid" class="google-weather-days-row" style="display: flex; gap: 14px; min-width: max-content; padding: 6px 2px;">
+                                    <!-- Dynamic weather cards style matching page2 -->
+                                </div>
+                            </div>
+
+                            <!-- Overview Graph Section with Feels Like Toggle -->
+                            <div class="hourly-overview-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 0 4px;">
+                                <span id="selectedDayLabel" style="font-size: 1.05rem; font-weight: 700; color: #fff;">Overview</span>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.8rem; color: #9ca3af; font-weight: 600;">Feels like</span>
+                                    <label class="switch" style="position: relative; display: inline-block; width: 36px; height: 20px; margin: 0;">
+                                        <input type="checkbox" style="opacity: 0; width: 0; height: 0;">
+                                        <span class="slider round" style="position: absolute; cursor: pointer; inset: 0; background-color: #374151; border-radius: 34px; transition: .4s;">
+                                            <span style="position: absolute; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: #9ca3af; border-radius: 50%; transition: .4s;"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Beautiful Integrated Sparkline Graph & Hours Row -->
+                            <div class="google-hourly-trend-widget" id="hourlyWeatherCard" style="background: #1f2937; border-radius: 20px; padding: 24px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); margin-bottom: 24px;">
+                                <div class="hourly-scroll-container" style="overflow-x: auto; width: 100%; scrollbar-width: thin;">
+                                    <div class="hourly-row-container" style="position: relative; height: 160px; min-width: 900px;">
+                                        
+                                        <!-- Top row for labels and icons -->
+                                        <div id="weatherHourlyRow" style="display: flex; justify-content: space-between; width: 100%; position: absolute; top: 0; bottom: 0; z-index: 2; padding: 0 20px;">
+                                            <!-- Dynamic hours structure with absolute temperature lines -->
+                                        </div>
+
+                                        <!-- Sparkline container aligned dynamically with hours -->
+                                        <div class="hourly-sparkline-canvas" id="hourlySparklineCanvas" style="position: absolute; bottom: 10px; left: 0; width: 100%; height: 75px; z-index: 1;">
+                                            <!-- SVG line will be rendered here dynamically -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Swarm Action Plan (Recommendations) at the bottom -->
+                            <div class="weather-swarm-panel" style="background: #1f2937; border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.04);">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+                                    <i class="fa-solid fa-wand-magic-sparkles" style="color: #fec006;"></i>
+                                    <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0;">Swarm Action Plan</h4>
+                                </div>
+                                <ul id="weatherSuggestionsList" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.82rem; color: #cbd5e1;">
+                                    <!-- suggestions will be loaded here -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. BUDGET & AI TIPS TAB -->
+                    <div id="budgetTab" class="tab-content">
+                        <div class="split-layout">
+                            <!-- Budget Breakdown -->
+                            <div class="glass-panel content-card">
+                                <h3><i class="fa-solid fa-receipt"></i> Budget Analysis</h3>
+                                <div class="budget-stat-row">
+                                    <div class="budget-stat-box">
+                                        <span class="stat-label">Total Limit</span>
+                                        <span class="stat-value" id="budgetTotalVal">₹25,000</span>
+                                    </div>
+                                    <div class="budget-stat-box">
+                                        <span class="stat-label">Estimated Spend</span>
+                                        <span class="stat-value text-accent" id="budgetSpentVal">₹22,100</span>
+                                    </div>
+                                    <div class="budget-stat-box">
+                                        <span class="stat-label">Buffer Left</span>
+                                        <span class="stat-value text-success" id="budgetRemainingVal">₹2,900</span>
+                                    </div>
+                                </div>
+
+                                <div class="gauge-container">
+                                    <div class="circular-progress-bar">
+                                        <div class="progress-ring-circle">
+                                            <svg width="120" height="120">
+                                                <circle cx="60" cy="60" r="50" class="ring-bg"></circle>
+                                                <circle cx="60" cy="60" r="50" class="ring-fill" id="budgetRingFill"></circle>
+                                            </svg>
+                                            <div class="ring-text">
+                                                <span id="budgetPercentVal">88%</span>
+                                                <span class="ring-lbl">Spent</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="budget-bars-list" id="budgetBars">
+                                    <!-- Dynamic bars representing spending per category -->
+                                </div>
+
+                                <div class="budget-alert" id="budgetStatusAlert">
+                                    <i class="fa-solid fa-circle-check"></i> <span id="budgetStatusText">Under Budget: Optimizations completed successfully!</span>
+                                </div>
+                            </div>
+
+                            <!-- AI Recommendations & Agent Feedback -->
+                            <div class="glass-panel content-card">
+                                <h3><i class="fa-solid fa-shield-halved"></i> Swarm Quality Scoring</h3>
+                                <div class="final-rec-badge" id="finalRecommendationBadge">
+                                    <div class="rec-score-ring">
+                                        <span class="score-num" id="finalRecScore">8.9</span>
+                                        <span class="score-label">Score</span>
+                                    </div>
+                                    <div class="rec-details">
+                                        <h4>Swarm Selected Package</h4>
+                                        <p>Accommodation: <strong id="finalRecHotel">Grand Palace Resort</strong></p>
+                                        <p>Transit Mode: <strong id="finalRecTransport">Flight</strong></p>
+                                    </div>
+                                </div>
+
+                                <div class="ai-tips-container">
+                                    <h4><i class="fa-solid fa-comments"></i> Collaborative Agent Briefing</h4>
+                                    <div class="ai-tips-list" id="aiRecommendationsList">
+                                        <!-- Dynamic tips generated by Groq LLM -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. PLACES TO VISIT TAB -->
+                    <div id="placesTab" class="tab-content active-content">
+                        <div class="glass-panel content-card">
+                            <h3><i class="fa-solid fa-map-location-dot"></i> Recommended Sights & Attractions</h3>
+                            <p class="section-desc">Handpicked sight attractions matching your travel style, linked directly to navigation maps.</p>
+                            <div class="places-grid-vertical" id="placesListVertical">
+                                <!-- Dynamic places will load here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2026 VoyageAI Tours Travel Swarm Planner. Made with <i class="fa-solid fa-heart text-accent"></i> & FastAPI.</p>
+        </footer>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js?v=1.0.12"></script>
+</body>
+</html>

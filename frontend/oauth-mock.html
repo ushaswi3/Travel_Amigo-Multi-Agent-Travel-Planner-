@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Authentication — VoyageAI Tours</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        .oauth-card {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0,0,0,0.05);
+            padding: 32px 24px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        .provider-logo {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .provider-logo.google { color: #ea4335; }
+        .provider-logo.facebook { color: #1877f2; }
+        .provider-logo.apple { color: #000; }
+        
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #0f172a;
+        }
+        .subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        .account-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+        .account-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .account-item:hover {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        .avatar.exp { background: #f97316; }
+        .avatar.fb { background: #1877f2; }
+        .avatar.ap { background: #000; }
+        
+        .account-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .account-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .account-email {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        .consent-text {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            margin-top: 24px;
+            line-height: 1.4;
+        }
+        .btn-consent {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #1877f2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+        .btn-consent:hover { background: #166fe5; }
+    </style>
+</head>
+<body>
+    <div class="oauth-card" id="oauthCard">
+        <!-- Rendered Dynamically based on Query params -->
+        <div id="loading">Loading consent screen...</div>
+    </div>
+
+    <script>
+        // Read provider from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const provider = urlParams.get('provider') || 'google';
+        const card = document.getElementById("oauthCard");
+
+        // Render appropriate login visual
+        if (provider === 'google') {
+            card.innerHTML = `
+                <div class="provider-logo google"><i class="fa-brands fa-google"></i></div>
+                <h2>Sign in with Google</h2>
+                <div class="subtitle">to continue to VoyageAI Tours</div>
+                <div class="account-list">
+                    <div class="account-item" onclick="selectAccount('spoor@gmail.com', 'Spoor')">
+                        <div class="avatar">S</div>
+                        <div class="account-info">
+                            <span class="account-name">Spoor</span>
+                            <span class="account-email">spoor@gmail.com</span>
+                        </div>
+                    </div>
+                    <div class="account-item" onclick="selectAccount('explorer@gmail.com', 'Travel Explorer')">
+                        <div class="avatar exp">E</div>
+                        <div class="account-info">
+                            <span class="account-name">Travel Explorer</span>
+                            <span class="account-email">explorer@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="consent-text">To continue, Google will share your name, email address, and profile picture with VoyageAI Tours.</p>
+            `;
+        } else if (provider === 'facebook') {
+            card.innerHTML = `
+                <div class="provider-logo facebook"><i class="fa-brands fa-facebook-f"></i></div>
+                <h2>Log in with Facebook</h2>
+                <div class="subtitle">VoyageAI Tours is requesting access to your public profile.</div>
+                <button class="btn-consent" onclick="selectAccount('fb_spoor@facebook.com', 'Spoor Facebook')">
+                    Continue as Spoor
+                </button>
+                <p class="consent-text" style="margin-top: 15px;">By continuing, VoyageAI Tours will receive your name, email, and public avatar.</p>
+            `;
+        } else {
+            card.innerHTML = `
+                <div class="provider-logo apple"><i class="fa-brands fa-apple"></i></div>
+                <h2>Sign in with Apple ID</h2>
+                <div class="subtitle">Use your Apple ID to sign in to VoyageAI Tours.</div>
+                <button class="btn-consent" style="background: #000;" onclick="selectAccount('apple_spoor@apple.com', 'Spoor Apple')">
+                    Continue with Apple ID
+                </button>
+                <p class="consent-text" style="margin-top: 15px;">Apple ID authentication secures your sessions with biometric validation.</p>
+            `;
+        }
+
+        // Return chosen credentials to parent window
+        function selectAccount(email, name) {
+            if (window.opener) {
+                window.opener.postMessage({
+                    type: 'oauth-success',
+                    provider: provider,
+                    email: email,
+                    name: name
+                }, window.location.origin);
+                window.close();
+            } else {
+                alert("Auth Window: Parent handler not connected. Mock login succeeded!");
+            }
+        }
+    </script>
+</body>
+</html>
