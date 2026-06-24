@@ -1,0 +1,59 @@
+{
+  "goa": {
+    "display_name": "Goa",
+    "attractions": ["Baga Beach", "Calangute Beach", "Dudhsagar Falls", "Fort Aguada", "Anjuna Beach", "Chapora Fort"],
+    "adventure_activities": ["Parasailing", "Jet Ski", "Scuba Diving", "Banana Boat Ride", "Trekking at Dudhsagar"],
+    "culture_spots": ["Basilica of Bom Jesus", "Se Cathedral", "Fontainhas Latin Quarter"],
+    "wildlife_spots": ["Bondla Wildlife Sanctuary", "Salim Ali Bird Sanctuary"],
+    "food_spots": ["Goan Fish Curry Rice", "Beach Shacks", "Mapusa Market"],
+    "best_time": "November to February",
+    "avg_temp_c": 30,
+    "theme": "Beaches + Adventure"
+  },
+  "manali": {
+    "display_name": "Manali",
+    "attractions": ["Solang Valley", "Rohtang Pass", "Hadimba Temple", "Old Manali"],
+    "adventure_activities": ["Paragliding", "Skiing", "River Rafting", "Zorbing"],
+    "culture_spots": ["Hadimba Temple", "Manu Temple", "Tibetan Monastery"],
+    "wildlife_spots": ["Great Himalayan National Park"],
+    "food_spots": ["Trout Fish", "Siddu", "Local Cafes in Old Manali"],
+    "best_time": "October to June",
+    "avg_temp_c": 12,
+    "theme": "Mountains + Adventure"
+  },
+  "jaipur": {
+    "display_name": "Jaipur",
+    "attractions": ["Hawa Mahal", "Amber Fort", "City Palace", "Jal Mahal"],
+    "adventure_activities": ["Hot Air Balloon Ride", "Desert Safari", "Zip-lining at Nahargarh"],
+    "culture_spots": ["Hawa Mahal", "City Palace", "Jantar Mantar"],
+    "wildlife_spots": ["Nahargarh Biological Park"],
+    "food_spots": ["Dal Baati Churma", "Pyaaz Kachori", "Laxmi Misthan Bhandar"],
+    "best_time": "October to March",
+    "avg_temp_c": 28,
+    "theme": "Culture + Heritage"
+  },
+  "kerala": {
+    "display_name": "Kerala",
+    "attractions": ["Alleppey Backwaters", "Munnar Tea Gardens", "Fort Kochi", "Periyar Wildlife Sanctuary"],
+    "adventure_activities": ["Houseboat Cruise", "Trekking in Munnar", "River Rafting"],
+    "culture_spots": ["Fort Kochi", "Mattancherry Palace"],
+    "wildlife_spots": ["Periyar Wildlife Sanctuary", "Thekkady"],
+    "food_spots": ["Kerala Sadya", "Appam with Stew", "Fish Molee"],
+    "best_time": "September to March",
+    "avg_temp_c": 27,
+    "theme": "Backwaters + Wildlife"
+  },
+  "rishikesh": {
+    "display_name": "Rishikesh",
+    "attractions": ["Laxman Jhula", "Ram Jhula", "Triveni Ghat", "Beatles Ashram"],
+    "adventure_activities": ["River Rafting", "Bungee Jumping", "Camping", "Trekking"],
+    "culture_spots": ["Parmarth Niketan Ashram", "Triveni Ghat Aarti"],
+    "wildlife_spots": ["Rajaji National Park"],
+    "food_spots": ["Chotiwala Restaurant", "Local Satvik Food"],
+    "best_time": "September to November, March to April",
+    "avg_temp_c": 22,
+    "theme": "Adventure + Spirituality"
+  }
+}
+
+
